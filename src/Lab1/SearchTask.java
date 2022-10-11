@@ -7,9 +7,9 @@ import java.util.Scanner;
 import java.util.concurrent.BlockingQueue;
 
 public class SearchTask implements Runnable {
-    private BlockingQueue <File> que;
-    private double minValue;
-    private double maxValue;
+    private final BlockingQueue <File> que;
+    private final double minValue;
+    private final double maxValue;
     SearchTask(BlockingQueue <File> que, double minValue, double maxValue) {
         this.que = que;
         this.minValue = minValue;
@@ -23,11 +23,9 @@ public class SearchTask implements Runnable {
             for (String string : strings) {
                 try{
                     if (Double.parseDouble(string) >= minValue && Double.parseDouble(string) <= maxValue)
-                        System.out.println(ff.getPath()
+                        System.out.println(ff.getPath()  + " -> " + inputString);
 
-                                + " -> " + inputString);
-
-                } catch (NumberFormatException e) {}
+                } catch (NumberFormatException ignored) {}
 
             }
         }
@@ -36,22 +34,16 @@ public class SearchTask implements Runnable {
 
     public void run() {
         try {
-
             while (true) {
-
                 File ff = que.take();
                 if (ff == FileRunTask.EXIT) {
-
                     que.put(ff);
                     break;
-
                 } else
                     if (ff.getName().endsWith(".cs"))
                         search(ff);
-
             }
-
         } catch (IOException e) { e.printStackTrace();
-        } catch (InterruptedException e) { }
+        } catch (InterruptedException ignored) { }
     }
 }
